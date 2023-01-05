@@ -22,7 +22,7 @@ regression = LinearRegression()
 regression.fit(x_train, y_train, None)
 
 # Predict values
-y_pred = regression.predict(x_test)
+# y_pred = regression.predict(x_test)
 
 # visualization
 plt.scatter(x_train, y_train, color='red')
@@ -31,5 +31,14 @@ plt.plot(x_train, regression.predict(x_train), color='blue')
 plt.xlabel('Years of experience')
 plt.ylabel('Salary')
 plt.title('Relation between salary and years of experience')
+
+plt.show()
+
+plt.scatter(x_test, y_test, color='red')
+plt.plot(x_test, regression.predict(x_test), color='blue')
+
+plt.xlabel('Years of experience')
+plt.ylabel('Salary')
+plt.title('Relation for test data')
 
 plt.show()
