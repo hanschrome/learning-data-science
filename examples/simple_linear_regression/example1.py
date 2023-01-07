@@ -22,7 +22,7 @@ regression = LinearRegression()
 regression.fit(x_train, y_train, None)
 
 # Predict values
-# y_pred = regression.predict(x_test)
+y_pred = regression.predict(x_test)
 
 # visualization
 plt.scatter(x_train, y_train, color='red')
@@ -42,3 +42,22 @@ plt.ylabel('Salary')
 plt.title('Relation for test data')
 
 plt.show()
+
+# Import the necessary metrics
+from sklearn.feature_selection import f_regression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Calculate the MSE
+mse = mean_squared_error(y_test, y_pred)
+
+# Calculate the R2 Score
+r2 = r2_score(y_test, y_pred)
+
+# Calculate the F-Statistic
+f, p = f_regression(x_test, y_test)
+
+# Print the results
+print(f"MSE: {mse:.2f}")
+print(f"R2 Score: {r2:.2f}")
+print(f"F-Statistic: {f}")
+print(f"P-Value: {p}")
