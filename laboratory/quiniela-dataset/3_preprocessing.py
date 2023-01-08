@@ -1,7 +1,16 @@
 import pandas as pd
 
 # Read the CSV file into a Pandas DataFrame
-df = pd.read_csv("datasets/dataset.csv", names=["local", "visitante", "signo", "fecha_completa"])
+df = pd.read_csv("datasets/output.csv", names=["local", "visitante", "signo", "fecha_completa"])
+
+df["fecha_completa"] = pd.to_datetime(df["fecha_completa"], unit='s', errors='coerce')
+
+df["year"] = df["fecha_completa"].dt.year
+df["month"] = df["fecha_completa"].dt.month
+df["day"] = df["fecha_completa"].dt.day
+
+# Drop the original fecha_completa column
+df = df.dropna(subset=["fecha_completa"])
 
 # Convert the signo column to a categorical data type
 df["signo"] = df["signo"].astype("category")
