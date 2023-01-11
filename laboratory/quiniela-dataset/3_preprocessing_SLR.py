@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import mean_squared_error, r2_score
 
 # Read the CSV file into a Pandas DataFrame
 df = pd.read_csv("datasets/output.csv", names=["local", "visitante", "signo", "fecha_completa"])
@@ -46,6 +47,22 @@ from sklearn import linear_model
 linear_regression_model = linear_model.LinearRegression()
 linear_regression_model.fit(X_train, y_train)
 
-predicts = linear_regression_model.predict(X_test)
+y_pred = linear_regression_model.predict(X_test)
 
-print(predicts)
+# Compute the MSE and R-squared of the model's predictions
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+# Print the results
+print(f"MSE: {mse:.2f}")  # 0.71
+print(f"R-squared: {r2:.2f}")  # -0.07
+
+"""
+The MSE is 0.71, which means that on average, your model's predictions are off by 0.71.
+This may or may not be a good score depending on the problem, but in general the smaller the MSE, the better the model.
+
+--
+
+The R-squared value of -0.07, which is less than 0, which means that the model's predictions are worse than just using the mean of the target variable.
+This could mean that the model is not a good fit for the data or the problem, or it could mean that there is a problem with the data or model.
+"""
