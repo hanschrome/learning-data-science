@@ -39,36 +39,40 @@ print(y_test.value_counts())
 print(X_train)
 
 """
-    Training the model
+    KNN
 """
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
 
-from sklearn.svm import SVC
+from keras.models import Sequential
+from keras.layers import SimpleRNN, Dense
+from keras.layers import TimeDistributed
 
-# Create a SVM classifier with a linear kernel
-svm = SVC(kernel='linear', C=1)
+# Define the number of input features and output classes
+input_features = 100
+output_classes = 3
 
-# Fit the classifier to the training data
-svm.fit(X_train, y_train)
+X_train = X_train.values.reshape(X_train.shape[0], 1, X_train.shape[1])
+X_test = X_test.values.reshape(X_test.shape[0], 1, X_test.shape[1])
 
-# make predictions on the testing data
-y_pred = svm.predict(X_test)
+input_dim = df.shape[1]
 
-# Compute the accuracy, precision, recall and f1-score of the model's predictions
-acc = accuracy_score(y_test, y_pred)
-prec = precision_score(y_test, y_pred, average="macro")
-rec = recall_score(y_test, y_pred, average="macro")
-f1 = f1_score(y_test, y_pred, average="macro")
 
-# Print the results
-print(f"Accuracy: {acc:.2f}")
-print(f"Precision: {prec:.2f}")
-print(f"Recall: {rec:.2f}")
-print(f"F1-score: {f1:.2f}")
+# Create the RNN model
+model = Sequential()
+model.add(TimeDistributed(Dense(input_dim), input_shape=(None, input_dim)))
+model.add(SimpleRNN(32, input_shape=(None, input_features)))
+model.add(Dense(output_classes, activation='softmax'))
 
-"""
-Taking too much time...
-"""
+# Compile the model
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train the model
+model.fit(X_train, y_train, epochs=10, batch_size=64)
+
+# Evaluate the model on the test dataset
+test_loss, test_acc = model.evaluate(X_test, y_test)
+print(f'Test accuracy: {test_acc}')
