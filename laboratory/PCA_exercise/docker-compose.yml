@@ -1,0 +1,10 @@
+version: '3'
+services:
+  python:
+    image: python:3.9
+    volumes:
+      - ./:/app
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=${DISPLAY}
+    working_dir: /app
